@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sample.dao.IUserDao">
+
+    <select id="findAll" parameterType="String" resultType="com.sample.domain.User">SELECT * FROM user</select>
+    <select id="findById" resultType="com.sample.domain.User">SELECT * FROM user where id = #{uid}</select>
+    <insert id="saveUser"
+            parameterType="com.sample.domain.User"
+            useGeneratedKeys="true"
+            keyProperty="id">insert into user (username, birthday, sex, address) values (#{username}, #{birthday}, #{sex}, #{address})</insert>
+    <update id="updateUser"
+            parameterType="com.sample.domain.User">update user set username=#{username},birthday=#{birthday},sex=#{sex},address=#{address} where id = #{id}</update>
+    <delete id="deleteUser" parameterType="int">delete from user where id =#{uid}</delete>
+    <select id="findByName" resultType="com.sample.domain.User"
+            parameterType="String">select * from user where username like '%${value}%'</select>
+    <select id="count" resultType="int">select count(*) from user;</select>
+<!--    <select id="findByVo" resultType="com.sample.domain.User" parameterType="com.sample.domain.QueryVo">-->
+<!--        select * from user where username like #{name} and address like #{address};-->
+<!--    </select>-->
+
+    <select id="findByVo" resultType="com.sample.domain.User" parameterType="com.sample.domain.QueryVo">
+        select * from user
+        <where>
+            <if test="name!=null">
+                and username like #{name}
+            </if>
+            <if test="address!=null">
+                and address like #{address}
+            </if>
+        </where>
+    </select>
+</mapper>
